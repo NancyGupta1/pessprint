@@ -1,0 +1,131 @@
+/* =========================
+   MEGA NAVBAR
+========================= */
+.mega-navbar {
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5;
+  position: relative;
+  z-index: 1000;
+}
+
+/* =========================
+   NAV LINKS
+========================= */
+.mega-nav-links {
+  display: flex;
+  justify-content: center;
+  gap: 28px;
+  list-style: none;
+  margin: 0;
+  padding: 14px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* =========================
+   NAV ITEM
+========================= */
+.mega-item {
+  position: relative;
+  cursor: pointer;
+  color: #111;
+}
+
+/* =========================
+   DROPDOWN (FULL WIDTH)
+========================= */
+.mega-dropdown {
+  position: fixed;
+  top: 57px;
+  left: 0;
+  right: 0;
+
+  width: 100vw;               
+  background: #ffffff;
+
+  min-height: calc(100vh - 120px);
+
+  border-top: 1px solid #e5e5e5;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  
+  transform: translateY(-10px);
+  transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+
+  z-index: 5000;
+}
+
+
+
+.mega-item:hover .mega-dropdown {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+
+/* =========================
+   DROPDOWN CONTENT
+========================= */
+.mega-content {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 32px 40px;
+
+  display: grid;
+   grid-template-columns: repeat(6, minmax(180px, 1fr));
+  gap: 40px;
+}
+
+/* =========================
+   COLUMN
+========================= */
+.mega-column h4 {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: #111;
+}
+
+.mega-column ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.mega-column li {
+  font-size: 13px;
+  color: #333;
+  margin-bottom: 8px;
+  line-height: 1.5;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.mega-column li:hover {
+  color: #0077cc;
+}
+
+.badge-new {
+  background: #ccefff;
+  color: #0077cc;
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+}
+
+.mega-footer {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 16px 40px 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0077cc;
+  cursor: pointer;
+}
