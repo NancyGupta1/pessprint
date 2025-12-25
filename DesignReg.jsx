@@ -8,8 +8,7 @@ export default function DesignReg() {
   const navigate = useNavigate();
 
   const [designName, setDesignName] = useState("");
-  const [subCategory, setSubCategory] = useState("");
-  const [subCategories, setSubCategories] = useState([]);
+  const [customFields, setCustomFields] = useState([""]); // ✅ dynamic inputs
   const [loadingStatus, setLoadingStatus] = useState(false);
   const [errorMessages, setErrorMessages] = useState({});
 
@@ -27,35 +26,37 @@ export default function DesignReg() {
       err = true;
     }
 
-    if (subCategories.length === 0) {
-      handleErrorMessages("subCategories", "Add at least one subcategory");
+    const filledFields = customFields.filter((f) => f.trim() !== "");
+    if (filledFields.length === 0) {
+      handleErrorMessages("customFields", "Add at least one field");
       err = true;
     }
 
     return err;
   };
 
-  /* ---------------- ADD SUBCATEGORY ON ENTER ---------------- */
-  const handleSubCategoryKeyDown = (e) => {
-    if (e.key === "Enter" && subCategory.trim()) {
-      e.preventDefault();
-
-      setSubCategories((prev) => [...prev, subCategory.trim()]);
-      setSubCategory("");
-      handleErrorMessages("subCategories", null);
-    }
+  /* ---------------- HANDLE FIELD CHANGE ---------------- */
+  const handleFieldChange = (index, value) => {
+    const updated = [...customFields];
+    updated[index] = value;
+    setCustomFields(updated);
+    handleErrorMessages("customFields", null);
   };
 
-  /* ---------------- REMOVE SUBCATEGORY ---------------- */
-  const removeSubCategory = (index) => {
-    setSubCategories((prev) => prev.filter((_, i) => i !== index));
+  /* ---------------- ADD FIELD ---------------- */
+  const addField = () => {
+    setCustomFields((prev) => [...prev, ""]);
+  };
+
+  /* ---------------- REMOVE FIELD ---------------- */
+  const removeField = (index) => {
+    setCustomFields((prev) => prev.filter((_, i) => i !== index));
   };
 
   /* ---------------- RESET ---------------- */
   const resetValue = () => {
     setDesignName("");
-    setSubCategory("");
-    setSubCategories([]);
+    setCustomFields([""]);
     setErrorMessages({});
   };
 
@@ -68,7 +69,7 @@ export default function DesignReg() {
 
     const body = {
       name: designName,
-      subCategories: subCategories,
+      customFields: customFields.filter((f) => f.trim() !== ""), // ✅ backend clean
     };
 
     const result = await postData("design/add", body);
@@ -78,7 +79,7 @@ export default function DesignReg() {
       Swal.fire({
         icon: "success",
         title: "Design Created!",
-        text: `Design "${designName}" has been created successfully`,
+        text: `Design "${designName}" created successfully`,
       });
       resetValue();
     } else {
@@ -108,8 +109,9 @@ export default function DesignReg() {
             <label className="form-label">Design Name</label>
             <input
               type="text"
-              className={`form-input ${errorMessages.designName ? "error" : ""
-                }`}
+              className={`form-input ${
+                errorMessages.designName ? "error" : ""
+              }`}
               value={designName}
               onChange={(e) => setDesignName(e.target.value)}
               onFocus={() => handleErrorMessages("designName", null)}
@@ -122,48 +124,55 @@ export default function DesignReg() {
             )}
           </div>
 
-          {/* SUBCATEGORY INPUT */}
+          {/* CUSTOM INPUTS */}
           <div className="form-group">
-            <label className="form-label">
-              Subcategories (Press Enter to add)
-            </label>
-            <input
-              type="text"
-              className="form-input"
-              value={subCategory}
-              onChange={(e) => setSubCategory(e.target.value)}
-              onKeyDown={handleSubCategoryKeyDown}
-              placeholder="Type subcategory and press Enter"
-            />
-            {errorMessages.subCategories && (
-              <div className="error-message">
-                {errorMessages.subCategories}
-              </div>
-            )}
-          </div>
+            <label className="form-label">Custom Fields</label>
 
-          {/* SUBCATEGORY LIST */}
-          {subCategories.length > 0 && (
-            <div className="subcategory-grid">
-              {subCategories.map((item, index) => (
-                <div key={index} className="subcategory-chip">
-                  {item}
-                  <span
-                    className="remove-chip"
-                    onClick={() => removeSubCategory(index)}
+            {customFields.map((field, index) => (
+              <div key={index} className="dynamic-input-row">
+                <input
+                  type="text"
+                  className="form-input"
+                  value={field}
+                  placeholder={`Field ${index + 1}`}
+                  onChange={(e) =>
+                    handleFieldChange(index, e.target.value)
+                  }
+                />
+
+                {customFields.length > 1 && (
+                  <button
+                    type="button"
+                    className="remove-btn"
+                    onClick={() => removeField(index)}
                   >
                     ✕
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
+                  </button>
+                )}
+              </div>
+            ))}
+
+            {errorMessages.customFields && (
+              <div className="error-message">
+                {errorMessages.customFields}
+              </div>
+            )}
+
+            <button
+              type="button"
+              className="add-btn"
+              onClick={addField}
+            >
+              + Add Field
+            </button>
+          </div>
 
           {/* ACTIONS */}
           <div className="form-actions">
             <button
-              className={`btn btn-primary ${loadingStatus ? "btn-loading" : ""
-                }`}
+              className={`btn btn-primary ${
+                loadingStatus ? "btn-loading" : ""
+              }`}
               onClick={handleSubmit}
               disabled={loadingStatus}
             >
