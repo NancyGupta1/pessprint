@@ -4,7 +4,10 @@ import MegaMenu from "./components/MegaMenu";
 import HurryNow from "./components/HurryNow";
 import HeroSection from "./components/HeroSection";
 import TemplateGrid from "./components/TemplateGrid";
+
 import Category from "./components/admin/Category";
+import DesignReg from "./components/admin/DesignReg";
+import SubCategory from "./components/admin/SubCategory"; 
 import ProductList from "./components/ProductList";
 import ProductDetailPage from "./components/ProductDetailPage";
 
@@ -33,6 +36,7 @@ const data = [
   },
 ];
 
+/* ---------------- HOME PAGE ---------------- */
 function HomePage() {
   return (
     <div className="app-wrapper">
@@ -40,6 +44,7 @@ function HomePage() {
       <MegaMenu />
       <HurryNow />
       <HeroSection />
+
       <div className="main-layout">
         <aside className="sidebar">
           <h4>Filters</h4>
@@ -59,11 +64,18 @@ function HomePage() {
   );
 }
 
+/* ---------------- APP ROUTES ---------------- */
 export default function App() {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+
+      {/* ADMIN PAGES */}
       <Route path="/category" element={<Category />} />
+      <Route path="/subcategory" element={<SubCategory />} /> 
+      <Route path="/design" element={<DesignReg />} />
+
+      {/* PRODUCT PAGES */}
       <Route path="/products" element={<ProductList />} />
       <Route path="/product/:id" element={<ProductDetailPage />} />
     </Routes>
